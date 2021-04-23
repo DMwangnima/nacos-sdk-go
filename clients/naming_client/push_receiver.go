@@ -43,7 +43,8 @@ type PushData struct {
 }
 
 var (
-	GZIP_MAGIC = []byte("\x1F\x8B")
+	GZIP_MAGIC     = []byte("\x1F\x8B")
+	RETRY_INTERVAL = time.Minute
 )
 
 func NewPushReceiver(hostReactor *HostReactor) *PushReceiver {
@@ -87,15 +88,12 @@ func (us *PushReceiver) startServer() {
 
 		if !ok && i == 2 {
 			logger.Errorf("failed to start udp server after trying 3 times.")
+			return
 		}
 	}
 
 	go func() {
-		defer func() {
-			if conn != nil {
-				conn.Close()
-			}
-		}()
+		defer conn.Close()
 		for {
 			us.handleClient(conn)
 		}
