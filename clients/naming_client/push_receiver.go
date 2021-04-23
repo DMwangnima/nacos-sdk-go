@@ -43,8 +43,7 @@ type PushData struct {
 }
 
 var (
-	GZIP_MAGIC     = []byte("\x1F\x8B")
-	RETRY_INTERVAL = time.Minute
+	GZIP_MAGIC = []byte("\x1F\x8B")
 )
 
 func NewPushReceiver(hostReactor *HostReactor) *PushReceiver {
